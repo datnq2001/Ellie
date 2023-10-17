@@ -1,31 +1,24 @@
-import { useState, useEffect } from 'react';  // import useEffect
+import React, { useState, useEffect } from 'react';
 import List from './components/List';
 import './App.css';
 
-
-
-//Build front
 function App() {
+    const [contacts, setContacts] = useState([]);
 
-    const [contacts, setContact] = useState([]);
-    
     useEffect(() => {
-      fetch('http://localhost/api/contacts')
-        .then(response => response.json())
-        .then(data => setContact(data))
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      }, []);
+        fetch('http://localhost:5000/api/contacts') // Update the URL
+            .then(response => response.json())
+            .then(data => setContacts(data))
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }, []);
 
-    
-    return(
-        <div class='head'>
-            <List heading = 'Contactor' contacts={contacts} setContact={setContact} />
+    return (
+        <div className='head'>
+            <List heading='Contactor' contacts={contacts} />
         </div>
     );
-  
-  
 }
 
 export default App;

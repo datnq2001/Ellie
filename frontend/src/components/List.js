@@ -1,17 +1,13 @@
-import { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 
-function Contact(props){
-
-    console.log(props)
-    return(
-        <div> </div>
+function Contact(props) {
+    return (
+        <div>{props.name}</div>
     );
 }
 
-
-
 function List(props) {
-    const host = "http://localhost:5000/api";
+    const host = "http://localhost:5000/api"; // Update the host
     const [contacts, setContacts] = useState([]);
     const [newContact, setNewContact] = useState("");
 
@@ -20,7 +16,7 @@ function List(props) {
     }
 
     function addContact() {
-        fetch(`${host}/contacts`, {
+        fetch(host + '/contacts', { // Replaced `${host}` with `host`
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,7 +26,7 @@ function List(props) {
             .then(response => response.json())
             .then(data => {
                 if (data && data.id) {
-                    setContacts(prevContacts => [...prevContacts, data]);
+                    setContacts(prevContacts => [...prevContacts, { id: data.id, name: data.name }]); // Include name
                 } else {
                     console.error('Error creating contact:', data);
                 }
@@ -42,7 +38,7 @@ function List(props) {
     }
 
     useEffect(() => {
-        fetch(`${host}/contacts`)
+        fetch(host + '/contacts') // Replaced `${host}` with `host`
             .then(response => response.json())
             .then(data => setContacts(data))
             .catch(error => console.error('Error:', error));
@@ -59,8 +55,7 @@ function List(props) {
                 </div>
                 {contacts.map(contact => (
                     <Contact
-                        setContacts={setContacts} // Changed the prop name to match state variable
-                        id={contact.id}
+                        name={contact.name} // Pass the name prop
                         key={contact.id}
                     />
                 ))}
